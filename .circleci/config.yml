@@ -1,0 +1,32 @@
+version: 2.1
+
+executors:
+  docker-executor:
+    docker:
+      - image: cimg/node:18.7.0
+    
+jobs:
+  build:
+    executor: docker-executor
+    steps:
+      - run: echo "I'm using the Docker executor!"
+  test:
+    executor: docker-executor
+    steps:
+      - checkout
+      - run: echo "Me too!"
+  deploy:
+    executor: docker-executor
+    steps:
+      - run: echo "And me!"
+  
+workflows:
+  build-test-deploy:
+    jobs:
+      - build
+      - test:
+          requires:
+            - build
+      - deploy:
+          requires:
+            - test
